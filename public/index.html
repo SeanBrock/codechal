@@ -17,6 +17,7 @@
            <th>Task Remaining - {{taskmanager.length}}</th>
            <th>Notes</th>
            <th></th>
+           <th></th>
          </tr>
         </thead>
         <tbody>
@@ -25,10 +26,11 @@
             <td><input class="form-control" ng-model="task.notes"></td>
             <td><button class="btn btn-primary" ng-click="addTask()">Add Task</button></td>
           </tr>
-          <tr ng-repeat="task in taskmanager">
+          <tr ng-repeat="task in taskmanager | orderBy:'-'">
             <td>{{task.task}}</td>
             <td>{{task.notes}}</td>
-            <td><button class="btn btn-danger" ng-click="deleteTask(task._id)">Remove Task</button></td>
+            <td><button class="btn btn-danger" ng-click="deleteTask(task._id)">Completed!</button></td>
+            <td><button class="btn btn-warning" ng-click="addToTop(task, task._id)">To Top!</button></td>
           </tr>
         </tbody>
 

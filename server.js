@@ -9,7 +9,6 @@ app.use(bodyParser.json());
 
 app.get('/taskmanager', function (req, res){
   db.taskmanager.find(function(err,docs){
-    console.log(docs);
     res.json(docs);
   })
 })
@@ -22,7 +21,6 @@ app.post('/taskmanager', function (req, res){
 
 app.delete('/taskmanager/:id', function (req, res){
   var id = req.params.id;
-  console.log(id)
   db.taskmanager.remove({_id: mongojs.ObjectId(id)}, function(err, doc){
     res.json(doc);
 

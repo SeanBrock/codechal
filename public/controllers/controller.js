@@ -1,6 +1,5 @@
 var myApp = angular.module('myApp', []);
 myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
-  console.log('inside controller!')
 
   var refresh = function() {
     $http.get("/taskmanager").then(function (success) {
@@ -21,9 +20,16 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
     });
   }
 
+  $scope.addToTop = function(task, ident) {
+    var holder = task//working!
+    holder._id = task.id//working!
+    $http.delete("/taskmanager/" + ident)//working!
+    $http.post("/taskmanager", holder)//working!
+    refresh()//working!
+  }
+
   $scope.deleteTask = function(id) {
     $http.delete("/taskmanager/" + id).then(function(success){
-      console.log('trying to delete?')
       refresh();
     }, function(error) {
       console.log('delete error');
