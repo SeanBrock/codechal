@@ -21,10 +21,11 @@ app.post('/taskmanager', function (req, res){
 
 app.delete('/taskmanager/:id', function (req, res){
   var id = req.params.id;
+
   db.taskmanager.remove({_id: mongojs.ObjectId(id)}, function(err, doc){
     res.json(doc);
-
   })
 })
+
 app.listen(3001);
 console.log('listening on 3001')

@@ -1,41 +1,99 @@
 <!DOCTYPE>
 <html ng-app="myApp">
   <head>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <title>Task Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <title>Main Page</title>
   </head>
+    <script>
+      function imageClick(url) {
+      window.location = url;
+      }
+      </script>
+    <style>
+      * {
+        font-family: arial;
+      }
+    </style>
   <body>
     <div class="container" ng-controller="AppCtrl">
-      <h1>Task Manager</h1>
-      <table class="table">
+      <div id="space">
+        <p></p>
+      </div>
+      <div id="top">
+      <img id="asset" src="resources/Home copy.png" width="35" padding="10" onclick="imageClick('home.html')">
+      <img id="asset" src="resources/Inbox copy.png" width="35" onclick="imageClick('inbox.html')">
+      <img id="asset" src="resources/Calendar copy.png" width="35" onclick="imageClick('calendar.html')">
+      <input type="text" id="searchBox" ng-model="searchBox" placeholder="   Search by Name, Technician, Appointment Type, etc.">
+      <img id= "asset" src="resources/Profile copy.png" width="35" style="float:right;" onclick="imageClick('profile.html')">
+      </div>
+      <table>
         <thead>
-         <tr>
-           <th>Task Remaining - {{taskmanager.length}}</th>
-           <th>Notes</th>
-           <th></th>
-           <th></th>
-         </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><input class="form-control" ng-model="task.task"></td>
-            <td><input class="form-control" ng-model="task.notes"></td>
-            <td><button class="btn btn-primary" ng-click="addTask()">Add Task</button></td>
           </tr>
-          <tr ng-repeat="task in taskmanager | orderBy:'-'">
-            <td>{{task.task}}</td>
-            <td>{{task.notes}}</td>
-            <td><button class="btn btn-danger" ng-click="deleteTask(task._id)">Completed!</button></td>
-            <td><button class="btn btn-warning" ng-click="addToTop(task, task._id)">To Top!</button></td>
+            <th id="left"></th>
+            <th>Name</th>
+            <th>Technician</th>
+            <th>Order Date</th>
+            <th>Appt. Type</th>
+            <th>Cell Number</th>
+            <th>Email</th>
+            <th id="right">Order State</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr ng-class-odd="'striped'" ng-repeat="task in taskmanager | filter:searchBox" ng-class="task.state">
+            <td >
+              <img src="resources/Cancel copy.png" width="30" ng-if="task.state === 'Canceled'">
+              <img src="resources/tick copy.png" width="18" ng-if="task.state === 'Done'">
+            </td>
+            <td class="form-control" ng-model="task.name">{{task.name}}</td>
+            <td class="form-control" ng-model="task.tech">{{task.tech}}</td>
+            <td class="form-control" ng-model="task.date">{{task.date}}</td>
+            <td class="form-control" ng-model="task.type">{{task.type}}</td>
+            <td class="form-control" ng-model="task.cell">{{task.cell}}</td>
+            <td class="form-control" ng-model="task.email">{{task.email}}</td>
+            <td>
+              <!-- <form id="targetForm"> -->
+              <select class="box" ng-class="task.state" class="form-control" ng-model="task.state" ng-change="updateTask(task._id, task.state)">
+                <option value="In progress">In Progress</option>
+                <option value="Done">Done</option>
+                <option value="Canceled">Canceled</option>
+              </select>
+              <!-- </form> -->
+            </td>
+          </tr>
+
+          <!-- add work order -->
+          <tr>
+            <td>
+              <button class="btn btn-primary" ng-click="addTask()">New
+              </button>
+            </td>
+            <td>
+              <input placeholder="Name" ng-model="task.name">
+            </td>
+            <td>
+              <input placeholder="Technician" ng-model="task.tech">
+            </td>
+            <td>
+              <input placeholder="Order Date" ng-model="task.date">
+            </td>
+            <td>
+              <input placeholder="Appt. Type" ng-model="task.type">
+            </td>
+            <td>
+              <input placeholder="Cell Number" ng-model="task.cell">
+            </td>
+            <td>
+              <input placeholder="Email" ng-model="task.email">
+            </td>
+            <td>
+              <select ng-model="task.state">
+                <option value="In progress">In Progress</option>
+              </select>
+            </td>
           </tr>
         </tbody>
-
-
-
       </table>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
     <script src="controllers/controller.js"></script>

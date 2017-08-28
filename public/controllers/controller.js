@@ -1,6 +1,7 @@
 var myApp = angular.module('myApp', []);
 myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
 
+
   var refresh = function() {
     $http.get("/taskmanager").then(function (success) {
       $scope.taskmanager = success.data;
@@ -12,22 +13,37 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
   $scope.refresh = function(){refresh();}
   refresh();
 
+  $scope.imageClick = function(url) {
+    window.location = url;
+  }
+
   $scope.addTask = function() {
-    $http.post("/taskmanager", $scope.task).then(function (success) {
+    if (this.task.date === undefined) {
+    var monthShortNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+    var date = new Date();
+    var y = date.getFullYear();
+    var d = date.getUTCDate();
+    var m = monthShortNames[date.getUTCMonth()];
+    this.task.date = d + ' ' + m + ' ' + y;
+    }
+    if (this.task.email === undefined) {
+      this.task.email = 'Not On File'
+    }
+    if (this.task.cell === undefined) {
+      this.task.cell = 'Not On File'
+    }
+    // this.task.state = 'In Progress'
+    $http.post("/taskmanager", this.task).then(function (success) {
       refresh();
+      $scope.task = {}
     }, function (error) {
       console.log('post error')
     });
-  }
 
-  $scope.addToTop = function(task, ident) {
-    var holder = task//working!
-    holder._id = task.id//working!
-    $http.delete("/taskmanager/" + ident)//working!
-    $http.post("/taskmanager", holder)//working!
-    refresh()//working!
   }
-
+  //will be usefull eventually
   $scope.deleteTask = function(id) {
     $http.delete("/taskmanager/" + id).then(function(success){
       refresh();
@@ -35,5 +51,32 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
       console.log('delete error');
     });
   };
+
+  $scope.updateTask = function(id) {
+    $http.post("/taskmanager/", this.task).then(function(success){
+
+    $http.delete("/taskmanager/" + id).then(function(success){
+      refresh();
+      $scope.task = {}
+    }, function(error) {
+      console.log('delete error');
+    });
+    }, function(error) {
+      console.log('update post error');
+    });
+  };
+
+
+
+//collection.findAndModify(criteria[, sort[, update[, options]]], callback)
+  //  $scope.updateTask = function(id, status) {
+  //   console.log(id)
+  //   console.log(status)
+  //   // $http.delete("/taskmanager/" + id).then(function(success){
+  //   //   refresh();
+  //   // }, function(error) {
+  //   //   console.log('delete error');
+  //   // });
+  // };
 
 }]);
