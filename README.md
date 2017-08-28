@@ -5,7 +5,7 @@ Fork Clone or Download repository.
 Project is using MongoDB for orders database.
 Appropriately named database will be created automatically on touch during $http.get...
 
-In terminal at project run npm install.
+In terminal at project root run npm install.
 
 Visit localhost:3001 in browser(built and tested in Chrome).
 
